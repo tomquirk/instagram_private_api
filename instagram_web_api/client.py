@@ -1102,6 +1102,33 @@ class Client(object):
             'variables': json.dumps(variables, separators=(',', ':'))
         }
         return self._make_request(self.GRAPHQL_API_URL, query=query)
+    
+    def media_seen(self, reel_media, **kwargs):
+        """
+        Mark a given reel_media item as seen
+
+        :param reel_media: Reel Media response from GraphQL
+        :param kwargs:
+        :return:
+        """
+        endpoint = 'https://www.instagram.com/stories/reel/seen/'
+
+        now = int(time.time())
+        owner_id = reel_media.get('owner', {}).get('id')
+        query = {
+            'reelMediaId': reel_media.get('id'),
+            'reelMediaOwnerId': owner_id,
+            'reelId': owner_id,
+            'reelMediaTakenAt': now,
+            'viewSeenAt': now,
+        }
+
+        try:
+            info = self._make_request(endpoint, query=query, params='')
+        except ClientError as ce:
+            raise ce
+
+        return info
 
     def tagged_user_feed(self, user_id, **kwargs):
         """
