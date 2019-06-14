@@ -309,7 +309,7 @@ class Client(object):
 
     @staticmethod
     def _extract_rhx_gis(html):
-        tmp_str = f':{"id":"{random.randint(10000000,99999999)}"}'
+        tmp_str = ':{"id":"%d"}' % random.randint(10000000,99999999)
         return hashlib.md5(tmp_str.encode()).hexdigest()
 
     @staticmethod
