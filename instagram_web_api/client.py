@@ -1108,23 +1108,22 @@ class Client(object):
         :param kwargs:
         :return:
         """
-        endpoint = 'https://www.instagram.com/stories/reel/seen/'
+        endpoint = 'https://www.instagram.com/stories/reel/seen'
 
-        now = int(time.time())
-        owner_id = reel_media.get('owner', {}).get('id')
-        query = {
-            'reelMediaId': reel_media.get('id'),
+        owner_id = int(reel_media.get('owner', {}).get('id'))
+        timestamp = reel_media.get('taken_at_timestamp')
+        params = {
+            'reelMediaId': int(reel_media.get('id')),
             'reelMediaOwnerId': owner_id,
             'reelId': owner_id,
-            'reelMediaTakenAt': now,
-            'viewSeenAt': now,
+            'reelMediaTakenAt': timestamp,
+            'viewSeenAt': timestamp,
         }
 
         try:
-            info = self._make_request(endpoint, query=query, params='')
+            info = self._make_request(endpoint, params=params)
         except ClientError as ce:
             raise ce
-
         return info
 
     def tagged_user_feed(self, user_id, **kwargs):
