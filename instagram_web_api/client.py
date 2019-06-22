@@ -97,7 +97,8 @@ class Client(object):
         self.rollout_hash = '1'
 
         cookie_string = kwargs.pop('cookie', None) or user_settings.get('cookie')
-        cookie_jar = ClientCookieJar(cookie_string=cookie_string)
+        cookie_obj = kwargs.pop('cookie_obj', None) or user_settings.get('cookie_obj')
+        cookie_jar = ClientCookieJar(cookie_string=cookie_string, cookie_obj=cookie_obj)
         if cookie_string and cookie_jar.auth_expires and int(time.time()) >= cookie_jar.auth_expires:
             raise ClientCookieExpiredError('Cookie expired at {0!s}'.format(cookie_jar.auth_expires))
         cookie_handler = compat_urllib_request.HTTPCookieProcessor(cookie_jar)

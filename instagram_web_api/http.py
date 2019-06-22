@@ -11,9 +11,11 @@ from .compat import compat_cookiejar, compat_pickle
 class ClientCookieJar(compat_cookiejar.CookieJar):
     """Custom CookieJar that can be pickled to/from strings
     """
-    def __init__(self, cookie_string=None, policy=None):
+    def __init__(self, cookie_obj=None, cookie_string=None, policy=None):
         compat_cookiejar.CookieJar.__init__(self, policy)
-        if cookie_string:
+        if cookie_obj:
+            self._cookies = cookie_obj
+        elif cookie_string:
             if isinstance(cookie_string, bytes):
                 self._cookies = compat_pickle.loads(cookie_string)
             else:
