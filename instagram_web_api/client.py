@@ -1100,6 +1100,7 @@ class Client(object):
         }
         return self._make_request(self.GRAPHQL_API_URL, query=query)
     
+    @login_required
     def media_seen(self, reel_media, **kwargs):
         """
         Mark a given reel_media item as seen
