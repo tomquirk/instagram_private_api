@@ -590,7 +590,6 @@ class Client(object):
                 'edge_media_to_comment', {}).get('edges', [])]
         return info
 
-    @login_required
     def media_likers(self, short_code, **kwargs):
         """
         Get media likers
