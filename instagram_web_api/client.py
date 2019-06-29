@@ -440,6 +440,25 @@ class Client(object):
             ClientCompatPatch.user(info['graphql']['user'], drop_incompat_keys=self.drop_incompat_keys)
         return info['graphql']['user']
 
+    def user_overview(self, user_id, **kwargs):
+        variables = {
+            "user_id":user_id,
+            "include_chaining":True,
+            "include_reel":True,
+            "include_suggested_users":True,
+            "include_logged_out_extras":True,
+            "include_highlight_reels":True
+        }
+
+        query = {
+            'query_hash': 'aec5501414615eca36a9acf075655b1e',
+            'variables': json.dumps(variables, separators=(',', ':'))
+        }
+
+        info = self._make_request(self.GRAPHQL_API_URL, query=query)
+        return info.get('data', {})
+
+
     def user_feed(self, user_id, **kwargs):
         """
         Get user feed
