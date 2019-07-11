@@ -115,7 +115,7 @@ class Client(object):
                     proxy_address = '{0!s}://{1!s}'.format(parsed_url.scheme, parsed_url.netloc)
                     proxy_handler = compat_urllib_request.ProxyHandler({'https': proxy_address})
                 else:
-                    raise ValueError('Invalid proxy argument: {0!s}'.format(proxy))
+                    raise ValueError('Invalid proxy argument: {0!s}'.format(self.proxy))
         handlers = []
         if proxy_handler:
             handlers.append(proxy_handler)
