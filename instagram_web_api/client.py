@@ -96,6 +96,7 @@ class Client(object):
         self.rhx_gis = kwargs.pop('rhx_gis', None) or user_settings.get('rhx_gis')
         self.rollout_hash = '1'
 
+
         cookie_string = kwargs.pop('cookie', None) or user_settings.get('cookie')
         cookie_obj = kwargs.pop('cookie_obj', None) or user_settings.get('cookie_obj')
         cookie_jar = ClientCookieJar(cookie_string=cookie_string, cookie_obj=cookie_obj)
@@ -105,10 +106,11 @@ class Client(object):
 
         proxy_handler = kwargs.pop('proxy_handler', None)
         if not proxy_handler:
-            proxy = kwargs.pop('proxy', None)
-            if proxy:
+            self.proxy = kwargs.pop('proxy', None) or user_settings.get('proxy')
+
+            if self.proxy:
                 warnings.warn('Proxy support is alpha.', UserWarning)
-                parsed_url = compat_urllib_parse_urlparse(proxy)
+                parsed_url = compat_urllib_parse_urlparse(self.proxy)
                 if parsed_url.netloc and parsed_url.scheme:
                     proxy_address = '{0!s}://{1!s}'.format(parsed_url.scheme, parsed_url.netloc)
                     proxy_handler = compat_urllib_request.ProxyHandler({'https': proxy_address})
@@ -180,6 +182,7 @@ class Client(object):
             'created_ts': int(time.time()),
             'rhx_gis': self.rhx_gis,
             'user_agent': self.user_agent,
+            'proxy': self.proxy
         }
 
     @staticmethod
@@ -390,6 +393,11 @@ class Client(object):
             on_login_callback = self.on_login
             on_login_callback(self)
         return login_res
+
+    def get_instagram_username(self, params):
+        account_res = self._make_request('https://www.instagram.com/accounts/web_create_ajax/', params=params)
+        return account_res
+
 
     def user_info(self, user_id, **kwargs):     # pragma: no cover
         """
