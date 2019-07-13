@@ -82,11 +82,11 @@ class Client(object):
         self.auto_patch = kwargs.pop('auto_patch', False)
         self.drop_incompat_keys = kwargs.pop('drop_incompat_keys', False)
         self.timeout = kwargs.pop('timeout', 10)
-        self.username = kwargs.pop('username', None)
         self.password = kwargs.pop('password', None)
         self.authenticate = kwargs.pop('authenticate', False)
         self.on_login = kwargs.pop('on_login', None)
         user_settings = kwargs.pop('settings', None) or {}
+        self.username = kwargs.pop('username', user_settings.get('username', None)) 
         self.user_agent = user_agent or user_settings.get('user_agent') or self.USER_AGENT
         self.mobile_user_agent = (kwargs.pop('mobile_user_agent', None)
                                   or user_settings.get('mobile_user_agent')
@@ -182,7 +182,8 @@ class Client(object):
             'created_ts': int(time.time()),
             'rhx_gis': self.rhx_gis,
             'user_agent': self.user_agent,
-            'proxy': self.proxy
+            'proxy': self.proxy,
+            'username': self.username
         }
 
     @staticmethod
