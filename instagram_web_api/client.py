@@ -113,7 +113,8 @@ class Client(object):
                 parsed_url = compat_urllib_parse_urlparse(self.proxy)
                 if parsed_url.netloc and parsed_url.scheme:
                     proxy_address = '{0!s}://{1!s}'.format(parsed_url.scheme, parsed_url.netloc)
-                    proxy_handler = compat_urllib_request.ProxyHandler({'https': proxy_address})
+                    proxy_obj = {'https': proxy_address} if proxy_address[:5] == 'https' else {'http': proxy_address}
+                    proxy_handler = compat_urllib_request.ProxyHandler(proxy_obj)
                 else:
                     raise ValueError('Invalid proxy argument: {0!s}'.format(self.proxy))
         handlers = []
@@ -245,7 +246,6 @@ class Client(object):
                     'Referer': 'https://www.instagram.com',
                     'Authority': 'www.instagram.com',
                     'Origin': 'https://www.instagram.com',
-                    'Content-Type': 'application/x-www-form-urlencoded'
                 })
         if query:
             url += ('?' if '?' not in url else '&') + compat_urllib_parse.urlencode(query)
@@ -1148,6 +1148,7 @@ class Client(object):
             'reelMediaTakenAt': timestamp,
             'viewSeenAt': timestamp,
         }
+        print('params::', params)
 
         try:
             info = self._make_request(endpoint, params=params)
